@@ -1,0 +1,32 @@
+import numpy as np
+
+# Define input-output pairs
+X1 = np.array([1, -1, 1])
+Y1 = np.array([-1, 1, -1])
+
+X2 = np.array([1, 1, -1])
+Y2 = np.array([1, -1, 1])
+
+# Create weight matrix using Hebbian learning rule
+W = np.outer(X1, Y1) + np.outer(X2, Y2)
+
+# Recall function
+def recall(input_vector, W):
+    return np.sign(np.dot(W, input_vector))
+
+# Testing recall for each input
+print("Recall for input X1:")
+output1 = recall(X1, W)
+print(output1)
+
+print("\nRecall for input X2:")
+output2 = recall(X2, W)
+print(output2)
+
+print("\nRecall for input Y1:")
+output3 = recall(Y1, W)
+print(output3)
+
+print("\nRecall for input Y2:")
+output4 = recall(Y2, W)
+print(output4)
