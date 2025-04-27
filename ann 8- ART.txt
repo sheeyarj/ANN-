@@ -1,0 +1,55 @@
+import numpy as np
+
+class ARTNetwork:
+    def __init__(self, input_size, rho, alpha):
+        self.input_size = input_size
+        self.rho = rho
+        self.alpha = alpha
+        self.W = np.zeros(input_size)
+        self.V = np.ones(input_size)
+
+    def train(self, X):
+        for x in X:
+            y = x / (self.rho + np.linalg.norm(self.W))
+            j = np.argmax(y)
+            if y[j] >= self.alpha * np.sum(y) and self.V[j] > 0:
+                self.W += self.V[j] * x
+                self.V[j] *= 0.5
+            else:
+                self.V[j] += 0.5
+
+    def classify(self, X):
+        classes = []
+        for x in X:
+            y = x / (self.rho + np.linalg.norm(self.W))
+            j = np.argmax(y)
+            classes.append(j)
+        return classes
+
+# Training Data
+X_train = np.array([
+    [0, 1, 1, 0],
+    [1, 0, 0, 1],
+    [1, 0, 0, 0]
+])
+
+# Test Data
+X_test = np.array([
+    [0, 1, 0, 0],
+    [1, 1, 1, 0]
+])
+
+input_size = X_train.shape[1]
+rho = 0.5
+alpha = 0.9
+
+# Create ART network and train it
+art_network = ARTNetwork(input_size, rho, alpha)
+art_network.train(X_train)
+
+# Classify test data
+classes = art_network.classify(X_test)
+
+# Display results
+for i, data in enumerate(X_test):
+    print(f"Test Data {i+1}: {data} -> Predicted Class: {classes[i]}")
